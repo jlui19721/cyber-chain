@@ -1,24 +1,31 @@
 import time
 
-import hardware.buttons_pirate
+from hardware import display_pirate, buttons_pirate
 
 FRAME_SECONDS = 1.0 / 30.0  # ~30 FPS; tune for Pi Zero vs Pi 4
 
 def main():
-    #display = make_display()
-    buttons = hardware.buttons_pirate.make_pirate_buttons()
-    #state = AppState()  # emoji index, animation phase, etc.
-
-    #display.clear()
-    last = time.monotonic()
+    print("Booting up...")
+    frame_num = 0
+    display = None
+    buttons = None
 
     try:
+        display = display_pirate.make_pirate_display()
+        buttons = buttons_pirate.make_pirate_buttons()
+        time.sleep(5)  # Wait 5 seconds to confirm boot up
+        print("Components initialized...")
+        #state = AppState()  # emoji index, animation phase, etc.
+
+        display.clear()
+        last = time.monotonic()
+
         while True:
             now = time.monotonic()
             dt = now - last
             last = now
 
-            events = buttons.poll()  # e.g. list of ButtonEven objects
+            events = buttons.poll()  # e.g. list of ButtonEvent objects
             #state.update(dt, events)  # pure app logic; no GPIO here
 
             #frame = state.render_frame()   # PIL Image or buffer your display expects
@@ -26,9 +33,18 @@ def main():
 
             # Fixed timestep: sleep remainder of frame
             elapsed = time.monotonic() - now
+
+            print(f"Frame {frame_num}\nElapsed: {elapsed:.3f}s\nEvents: {events}")
+
             sleep_for = FRAME_SECONDS - elapsed
             if sleep_for > 0:
                 time.sleep(sleep_for)
     finally:
-        #display.shutdown()
-        buttons.shutdown()
+        print("Shutting down...")
+        if display is not None:
+            display.shutdown()
+        if buttons is not None:
+            buttons.shutdown()
+
+if __name__ == "__main__":
+    main()

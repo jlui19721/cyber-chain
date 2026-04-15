@@ -43,7 +43,8 @@ class ButtonInput:
             except queue.Empty:
                 break
 
-        GPIO.cleanup([list(PINS.values())])
+        for pin in PINS.values():
+            GPIO.cleanup(pin)
 
 class Button:
     def __init__(

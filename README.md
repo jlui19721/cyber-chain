@@ -13,3 +13,17 @@ This is a raspberry pi project that creates an emoji animation that users would 
        * Mini speaker (1W / 8Ω, attached)
 * Microphone (TBD)
 * UPS + voltage regulator (TBD)
+
+# Manual Build
+```
+git clone ``
+git submodule update --init --recursive
+
+python3 -m venv venv
+source venv/bin/activate
+
+pip install Pillow
+pip install ./third-party/st7789-python
+pip install RPi.GPIO
+```
+# Create virtual environment with `
