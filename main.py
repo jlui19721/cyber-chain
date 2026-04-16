@@ -13,7 +13,7 @@ def main():
     try:
         display = display_pirate.make_pirate_display()
         buttons = buttons_pirate.make_pirate_buttons()
-        time.sleep(5)  # Wait 5 seconds to confirm boot up
+        time.sleep(2)  # Wait 2 seconds to confirm boot up
         print("Components initialized...")
         #state = AppState()  # emoji index, animation phase, etc.
 
@@ -34,7 +34,8 @@ def main():
             # Fixed timestep: sleep remainder of frame
             elapsed = time.monotonic() - now
 
-            print(f"Frame {frame_num}\nElapsed: {elapsed:.3f}s\nEvents: {events}")
+            print(f"Frame {frame_num}\nElapsed: {elapsed:.6f}s\nEvents: {events}")
+            frame_num += 1
 
             sleep_for = FRAME_SECONDS - elapsed
             if sleep_for > 0:

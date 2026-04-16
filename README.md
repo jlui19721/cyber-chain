@@ -16,7 +16,10 @@ This is a raspberry pi project that creates an emoji animation that users would 
 
 # Manual Build
 ```
-git clone ``
+sudo apt-get update
+sudo apt-get install liblgpio-dev build-essential swig
+
+git clone git@github.com:jlui19721/cyber-chain.git
 git submodule update --init --recursive
 
 python3 -m venv venv
@@ -24,6 +27,5 @@ source venv/bin/activate
 
 pip install Pillow
 pip install ./third-party/st7789-python
-pip install RPi.GPIO
+pip install RPi.lgpio
 ```
-# Create virtual environment with `
