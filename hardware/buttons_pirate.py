@@ -3,7 +3,7 @@ from typing import List
 
 import RPi.GPIO as GPIO
 
-from services.buttonevent import ButtonEvent, ButtonId, ButtonEventKind
+from services.buttonevent import ButtonId, RawButtonEdge, ButtonEdge
 
 # https://github.com/pimoroni/pirate-audio/blob/master/build%20your%20own/read_gpio_pins.py
 # The buttons on Pirate Audio are connected to pins 5, 6, 16 and 24
@@ -17,14 +17,14 @@ PINS: dict[ButtonId, int] = {
 class ButtonInput:
     def __init__(
         self,
-        event_queue: "queue.Queue[ButtonEvent]",
+        event_queue: "queue.Queue[RawButtonEdge]",
         buttons: List["Button"],
         ) -> None:
         self._q = event_queue
         self._buttons = buttons  # Keep refs for teardown
 
-    def poll(self) -> List[ButtonEvent]:
-        out: List[ButtonEvent] = []
+    def poll(self) -> List[ButtonEdge]:
+        out: List[ButtonEdge] = []
         while True:
             try:
                 out.append(self._q.get_nowait())
@@ -51,7 +51,7 @@ class Button:
         self,
         button_id: ButtonId,
         bcm_pin: int,
-        event_queue: "queue.Queue[ButtonEvent]",
+        event_queue: "queue.Queue[RawButtonEdge]",
         *,
         # Buttons connect to ground when pressed. so we should set them up
         # with a "PULL UP", which weakly pulls the input signal to 3.3V
@@ -78,8 +78,8 @@ class Button:
     def _on_edge(self, channel: int) -> None:
         # Pull-up: pressed reads LOW (0). If your board is active-high, flip this.
         pressed = GPIO.input(channel) == GPIO.LOW
-        kind = ButtonEventKind.PRESS if pressed else ButtonEventKind.RELEASE
-        self._q.put(ButtonEvent(self._id, kind))
+        kind = ButtonEdge.DOWN if pressed else ButtonEdge.UP
+        self._q.put(RawButtonEdge(self._id, kind))
 
     def teardown(self) -> None:
         GPIO.remove_event_detect(self._pin)
@@ -87,7 +87,7 @@ class Button:
 # Initialize the buttons on the Pimoroni Pirate Audio board
 def make_pirate_buttons() -> ButtonInput:
     GPIO.setmode(GPIO.BCM)
-    q: "queue.Queue[ButtonEvent]" = queue.Queue()
+    q: "queue.Queue[RawButtonEdge]" = queue.Queue()
     buttons = [Button(bid, PINS[bid], q) for bid in PINS]
     for b in buttons:
         b.setup()

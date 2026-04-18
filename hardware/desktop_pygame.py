@@ -8,7 +8,7 @@ import queue
 import pygame
 from PIL import Image
 
-from services.buttonevent import ButtonEvent, ButtonId, ButtonEventKind
+from services.buttonevent import ButtonId, RawButtonEdge, ButtonEdge
 
 # Default: WASD → physical labels A,B,X,Y
 DEFAULT_KEY_MAP: dict[ButtonId, int] = {}
@@ -55,8 +55,8 @@ class DesktopButtons:
         self._map = key_map if key_map is not None else _default_keymap()
         self._stop = stop_event
 
-    def poll(self) -> list[ButtonEvent]:
-        out: list[ButtonEvent] = []
+    def poll(self) -> list[ButtonEdge]:
+        out: list[ButtonEdge] = []
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 if self._stop is not None:
@@ -67,9 +67,9 @@ class DesktopButtons:
                     self._stop.set()
                 continue
             elif event.type == pygame.KEYDOWN and event.key in self._map:
-                out.append(ButtonEvent(self._map[event.key], ButtonEventKind.PRESS))
+                out.append(RawButtonEdge(self._map[event.key], ButtonEdge.DOWN))
             elif event.type == pygame.KEYUP and event.key in self._map:
-                out.append(ButtonEvent(self._map[event.key], ButtonEventKind.RELEASE))
+                out.append(RawButtonEdge(self._map[event.key], ButtonEdge.UP))
         return out
 
     def shutdown(self) -> None:

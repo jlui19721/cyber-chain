@@ -2,7 +2,7 @@ import signal
 import time
 import threading
 
-from app.helloworldapp import HelloWorldApp
+from app.helloworld.helloworldapp import HelloWorldApp
 from hardware import display_pirate, buttons_pirate
 
 """Raspberry Pi Implementation"""

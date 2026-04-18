@@ -6,6 +6,8 @@ import time
 from app.helloworld.render import render
 from app.helloworld.state import AppState
 
+from services.buttongesture import ButtonGestureInput
+
 FRAME_SECONDS = 1.0 / 30.0  # ~30 FPS; tune for Pi Zero vs Pi 4
 
 class HelloWorldApp:
@@ -22,7 +24,7 @@ class HelloWorldApp:
         frame_seconds: float = FRAME_SECONDS,
     ) -> None:
         self._stop = quit_event  # Event to signal the main loop to stop
-
+        self._gesture = ButtonGestureInput(hold_threshold_sec=1.0)
         self._display = display
         self._buttons = buttons
         self._frame_seconds = frame_seconds
@@ -37,7 +39,7 @@ class HelloWorldApp:
             dt = now - last
             last = now
 
-            events = self._buttons.poll()
+            events = self._gesture.process(self._buttons.poll(), dt)   # Get raw button events & feed to gesture processor
             self._state.update(events, dt)
 
             if events:  # if there are any events, update the state and display the frame

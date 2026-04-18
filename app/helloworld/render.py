@@ -25,5 +25,6 @@ def render(state: AppState, w: int = 240, h: int = 240) -> Image.Image:
     draw.text(xy = (12, 50), text = f"counter: {state.counter}", fill=(255, 255, 255), font=font)
     draw.text(xy = (12, 70), text = f"last pressed: {state.last_label}", fill=(180, 180, 200), font=small)
     draw.text(xy = (12, 130), text = f"frame: {state.frame_idx}", fill=(120, 120, 140), font=small)
+    draw.text(xy = (12, 150), text = f"last event: {state.last_event}", fill=(120, 120, 140), font=small)
 
     return img
