@@ -1,0 +1,8 @@
+-r requirements-dev.txt
+
+gpiod==2.4.2
+gpiodevice==0.0.5
+lgpio==0.2.2.0
+rpi-lgpio==0.6
+spidev==3.8
+-e ./third-party/st7789-python

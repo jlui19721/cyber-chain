@@ -1,8 +1,0 @@
-gpiod==2.4.2
-gpiodevice==0.0.5
-lgpio==0.2.2.0
-numpy==2.4.4
-pillow==12.2.0
-rpi-lgpio==0.6
-spidev==3.8
-st7789 @ file:///home/justin/projects/cyber-chain/third-party/st7789-python

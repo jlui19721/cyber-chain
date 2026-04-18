@@ -25,7 +25,9 @@ git submodule update --init --recursive
 python3 -m venv venv
 source venv/bin/activate
 
-pip install Pillow
-pip install ./third-party/st7789-python
-pip install RPi.lgpio
+pip install -r requirements-dev.txt        # dev / CI / Mac-friendly
+pip install -r requirements-prod.txt       # Pi / real hardware
 ```
+
+# Run Tests
+`pytest`
