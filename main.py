@@ -1,46 +1,42 @@
+import signal
+import threading
 import time
 
 from hardware import display_pirate, buttons_pirate
-
-FRAME_SECONDS = 1.0 / 30.0  # ~30 FPS; tune for Pi Zero vs Pi 4
+from app.helloworldapp import HelloWorldApp
 
 def main():
     print("Booting up...")
-    frame_num = 0
     display = None
     buttons = None
+    app = None
+    worker = None
+    stop = threading.Event()  # Event to signal the main thread to stop
+
+    def request_stop(signum=None, frame=None):
+        stop.set()
+
+    signal.signal(signal.SIGINT, request_stop)
+    signal.signal(signal.SIGTERM, request_stop)
 
     try:
         display = display_pirate.make_pirate_display()
         buttons = buttons_pirate.make_pirate_buttons()
         time.sleep(2)  # Wait 2 seconds to confirm boot up
         print("Components initialized...")
-        #state = AppState()  # emoji index, animation phase, etc.
 
-        display.clear()
-        last = time.monotonic()
+        app = HelloWorldApp(display, buttons)
+        worker = threading.Thread(target=app.run, name="HelloWorldApp", daemon=False)
+        worker.start()
 
-        while True:
-            now = time.monotonic()
-            dt = now - last
-            last = now
+        stop.wait()
 
-            events = buttons.poll()  # e.g. list of ButtonEvent objects
-            #state.update(dt, events)  # pure app logic; no GPIO here
-
-            #frame = state.render_frame()   # PIL Image or buffer your display expects
-            #display.show(frame)
-
-            # Fixed timestep: sleep remainder of frame
-            elapsed = time.monotonic() - now
-
-            print(f"Frame {frame_num}\nElapsed: {elapsed:.6f}s\nEvents: {events}")
-            frame_num += 1
-
-            sleep_for = FRAME_SECONDS - elapsed
-            if sleep_for > 0:
-                time.sleep(sleep_for)
     finally:
+        if app is not None:
+            app.shutdown()
+        if worker is not None:
+            worker.join(timeout=5.0)
+
         print("Shutting down...")
         if display is not None:
             display.shutdown()
