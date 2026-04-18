@@ -2,7 +2,7 @@
 # @brief Rendering function for displaying an AppState on an ST7789 LCD display.
 
 from PIL import Image, ImageDraw, ImageFont
-from app.state import AppState
+from app.helloworld.state import AppState
 
 # @brief Returns a PIL Image reflecting the current AppState to display
 # @param state - The current AppState

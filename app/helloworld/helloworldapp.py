@@ -3,8 +3,8 @@
 import threading
 import time
 
-from app.render import render
-from app.state import AppState
+from app.helloworld.render import render
+from app.helloworld.state import AppState
 
 FRAME_SECONDS = 1.0 / 30.0  # ~30 FPS; tune for Pi Zero vs Pi 4
 

@@ -2,7 +2,7 @@
 # @brief Focus on testing the `AppState` class
 import pytest
 
-from app.state import AppState
+from app.helloworld.state import AppState
 from services.buttonevent import ButtonEvent, ButtonEventKind, ButtonId
 
 @pytest.mark.parametrize(

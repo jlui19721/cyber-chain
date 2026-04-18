@@ -1,7 +1,7 @@
 import signal
 import time
 import threading
-from app.helloworldapp import HelloWorldApp
+from app.helloworld.helloworldapp import HelloWorldApp
 
 """Desktop Implementation"""
 from hardware.desktop_pygame import make_desktop
