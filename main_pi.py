@@ -1,9 +1,11 @@
 import signal
-import threading
 import time
+import threading
 
-from hardware import display_pirate, buttons_pirate
 from app.helloworldapp import HelloWorldApp
+from hardware import display_pirate, buttons_pirate
+
+"""Raspberry Pi Implementation"""
 
 def main():
     print("Booting up...")
@@ -25,7 +27,7 @@ def main():
         time.sleep(2)  # Wait 2 seconds to confirm boot up
         print("Components initialized...")
 
-        app = HelloWorldApp(display, buttons)
+        app = HelloWorldApp(display, buttons, quit_event=stop)
         worker = threading.Thread(target=app.run, name="HelloWorldApp", daemon=False)
         worker.start()
 

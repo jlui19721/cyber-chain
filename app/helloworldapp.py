@@ -12,9 +12,16 @@ class HelloWorldApp:
     # @brief Initialize the HelloWorldApp
     # @param display - `PirateDisplay` instance connected to ST7789 LCD display
     # @param buttons - `ButtonInput` instance connected to Pimoroni Pirate Audio buttons
+    # @param quit_event - Event to signal the main loop to stop
     # @param frame_seconds - Target FPS (default: 30 FPS)
-    def __init__(self, display, buttons, frame_seconds: float = FRAME_SECONDS):
-        self._stop = threading.Event()   # Event to signal the main loop to stop
+    def __init__(
+        self,
+        display,
+        buttons,
+        quit_event: threading.Event,
+        frame_seconds: float = FRAME_SECONDS,
+    ) -> None:
+        self._stop = quit_event  # Event to signal the main loop to stop
 
         self._display = display
         self._buttons = buttons
