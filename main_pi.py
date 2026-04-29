@@ -24,10 +24,12 @@ def main():
     try:
         display = display_pirate.make_pirate_display()
         buttons = buttons_pirate.make_pirate_buttons()
+        # @todo Add audio support via pirate board
+        # audio = audio_pirate.make_pirate_audio()
         time.sleep(2)  # Wait 2 seconds to confirm boot up
         print("Components initialized...")
 
-        app = HelloWorldApp(display, buttons, quit_event=stop)
+        app = HelloWorldApp(display, buttons, audio, quit_event=stop)
         worker = threading.Thread(target=app.run, name="HelloWorldApp", daemon=False)
         worker.start()
 
