@@ -22,7 +22,7 @@ def _default_keymap() -> dict[ButtonId, int]:
     }
 
 class DesktopDisplay:
-    """Same contract as hardware.display_pirate.PirateDisplay: clear() + show() + shutdown()"""
+    """Same contract as hardware.display_pirate.PirateDisplay"""
     def __init__(self, width: int = 240, height: int = 240) -> None:
         pygame.display.init()
         self._screen = pygame.display.set_mode((width, height))
@@ -45,7 +45,7 @@ class DesktopDisplay:
         pygame.display.quit()
 
 class DesktopButtons:
-    """Same contract as hardware.buttons_pirate.ButtonInput: poll() + shutdown()"""
+    """Same contract as hardware.buttons_pirate.ButtonInput"""
     def __init__(
         self,
         key_map: dict[ButtonId, int] | None = None,
@@ -75,7 +75,24 @@ class DesktopButtons:
     def shutdown(self) -> None:
         pass
 
+class DesktopAudio:
+    """Contract defined in hardware.audio_output.AudioOutput"""
+    def __init__(self) -> None:
+        if not pygame.mixer.get_init():
+            pygame.mixer.init(frequency=44100, size=-16, channels=2, buffer=512)
+
+    def play_music_file(self, filename: str) -> None:
+        pygame.mixer.music.load(filename)
+        pygame.mixer.music.play(loop=0, start=0.0, fade_ms=0)
+
+    def pause_music(self) -> None:
+        if pygame.mixer.music.get_busy():
+            pygame.mixer.music.pause()
+
+    def shutdown(self) -> None:
+        pygame.mixer.quit()
+
 def make_desktop(width: int = 240, height: int = 240, stop_event = None):
     pygame.init()
     key_map = _default_keymap()
-    return DesktopDisplay(width, height), DesktopButtons(key_map, stop_event=stop_event)
+    return DesktopDisplay(width, height), DesktopButtons(key_map, stop_event=stop_event), DesktopAudio()
