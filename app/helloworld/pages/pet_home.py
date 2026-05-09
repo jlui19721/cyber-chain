@@ -40,14 +40,14 @@ class PetHomePage:
         img = Image.new("RGB", (240, 240), color = (20, 20, 30))
         draw = ImageDraw.Draw(img)
         font, small = default_fonts()
-        draw.text(xy = (12, 12), text = "Pet Home", fill = (220, 220, 255), font=font)
-        y = 52
-        for line in (
-            "A: Playground",
-            "B: Music",
-            "X: Voice",
-            "Y: Notes",
-        ):
-            draw.text(xy = (12, y), text = line, fill = (180, 180, 200), font=small)
-            y += 20
+
+        # Title for the page
+        draw.text(xy = (120, 0), text = "Pet Home", fill = (220, 220, 255), font=font, anchor="mt")
+
+        # Button labels for navigating to other pages
+        draw.text(xy = (5, 35), text = "A: Playground", fill = (180, 180, 200), font=small, anchor="lt")
+        draw.text(xy = (235, 35), text = "X: Voice", fill = (180, 180, 200), font=small, anchor="rt")
+        draw.text(xy = (5, 200), text = "B: Music", fill = (180, 180, 200), font=small, anchor="lb")
+        draw.text(xy = (235, 200), text = "Y: Notes", fill = (180, 180, 200), font=small, anchor="rb")
+
         return img

@@ -15,10 +15,10 @@ DEFAULT_KEY_MAP: dict[ButtonId, int] = {}
 
 def _default_keymap() -> dict[ButtonId, int]:
     return {
-        pygame.K_w: ButtonId.A,
-        pygame.K_a: ButtonId.B,
-        pygame.K_s: ButtonId.X,
-        pygame.K_d: ButtonId.Y,
+        pygame.K_a: ButtonId.A,
+        pygame.K_b: ButtonId.B,
+        pygame.K_x: ButtonId.X,
+        pygame.K_y: ButtonId.Y,
     }
 
 class DesktopDisplay:

@@ -99,7 +99,11 @@ class PlaygroundPage:
         draw = ImageDraw.Draw(img)
         font, small = default_fonts()
 
-        draw.text((12, 12), text="cyber-chain", fill=(200, 200, 255), font=font)
+        # Title for the page
+        draw.text(xy = (120, 0), text = "Playground", fill = (220, 220, 255), font=font, anchor="mt")
+
+        # Dashboard
+        draw.text((12, 12), text="Dashboard", fill=(200, 200, 255), font=font)
         draw.text((12, 50), text=f"counter: {state.counter}", fill=(255, 255, 255), font=font)
         draw.text((12, 70), text=f"last pressed: {state.last_label}", fill=(180, 180, 200), font=small)
         draw.text((12, 130), text=f"frame: {state.frame_idx}", fill=(120, 120, 140), font=small)
